@@ -23,6 +23,7 @@ class HelloWorldCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
+        $app['todo'];
         $output->writeln('Hello world');
         return;
     }
