@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+use Command\HelloWorldCommand;
+use Knp\Provider\ConsoleServiceProvider;
+
+require(__DIR__ . '/../app/app.php');
+
+$app->register(
+    new ConsoleServiceProvider(),
+    [
+        'console.name' => 'Lolstatus',
+        'console.version' => '0.1.0',
+        'console.project_directory' => __DIR__ . '/../'
+    ]
+);
+$console = $app['console'];
+$console->add(new HelloWorldCommand());
+$console->run();
