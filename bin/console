@@ -14,5 +14,7 @@ $app->register(
     ]
 );
 $console = $app['console'];
+$console->setHelperSet($app['migrations.em_helper_set']);
+$console->addCommands($app['migrations.commands']);
 $console->add(new HelloWorldCommand());
 $console->run();

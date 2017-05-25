@@ -4,7 +4,9 @@
     "require": {
         "silex/silex": "^2.1",
         "rpodwika/yaml-config-service-provider": "^1.0",
-        "knplabs/console-service-provider": "^2.0"
+        "knplabs/console-service-provider": "^2.0",
+        "dflydev/doctrine-orm-service-provider": "^2.0",
+        "kurl/silex-doctrine-migrations-provider": "^0.2.1"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.0",
