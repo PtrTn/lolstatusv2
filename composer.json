@@ -6,7 +6,8 @@
         "rpodwika/yaml-config-service-provider": "^1.0",
         "knplabs/console-service-provider": "^2.0",
         "dflydev/doctrine-orm-service-provider": "^2.0",
-        "kurl/silex-doctrine-migrations-provider": "^0.2.1"
+        "kurl/silex-doctrine-migrations-provider": "^0.2.1",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.0",
