@@ -20,7 +20,8 @@ class StatusImportClient
         $this->httpClient = $httpClient;
     }
 
-    public function getStatusForRegion(Region $region) : Status {
+    public function getStatusForRegion(Region $region) : Status
+    {
         try {
             $response = $this->httpClient->get($region->toString());
         } catch (\Exception $e) {
@@ -29,7 +30,8 @@ class StatusImportClient
         return $this->createStatusFromResponse($response);
     }
 
-    public function createStatusFromResponse(ResponseInterface $response) : Status {
+    public function createStatusFromResponse(ResponseInterface $response) : Status
+    {
         $contents = $response->getBody()->getContents();
         if (empty($contents)) {
             throw new ImportFailedException();

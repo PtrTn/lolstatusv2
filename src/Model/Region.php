@@ -16,7 +16,8 @@ class Region
      */
     private $region;
 
-    private function __construct(string $region) {
+    private function __construct(string $region)
+    {
         Assert::oneOf($region, [
             self::EUW,
             self::NA,
@@ -26,15 +27,18 @@ class Region
         $this->region = $region;
     }
 
-    public static function euWest() : self {
+    public static function euWest() : self
+    {
         return new self(self::EUW);
     }
 
-    public static function northAmerica() : self {
+    public static function northAmerica() : self
+    {
         return new self(self::NA);
     }
 
-    public static function oceania() : self {
+    public static function oceania() : self
+    {
         return new self(self::OCE);
     }
 
@@ -43,7 +47,8 @@ class Region
         return new self(self::LAN);
     }
 
-    public function toString() : string {
+    public function toString() : string
+    {
         return $this->region;
     }
 }

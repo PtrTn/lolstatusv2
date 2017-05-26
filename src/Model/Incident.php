@@ -48,8 +48,8 @@ class Incident
         string $id,
         bool $active,
         DateTime $createdAt,
-        array $updates)
-    {
+        array $updates
+    ) {
         $this->region = $region;
         $this->service = $service;
         $this->serviceStatus = $serviceStatus;
