@@ -2,49 +2,67 @@
 
 namespace Model;
 
-use DateTime;
+use DateTimeImmutable;
 
+/**
+ * @Entity
+ * @Table(name="`Update`")
+ */
 class Update
 {
     /**
-     * @var string
+     * @Id
+     * @GeneratedValue
+     * @Column(type="integer")
+     * @var int
      */
     private $id;
 
     /**
+     * @Column(type="string")
+     * @var string
+     */
+    private $updateId;
+
+    /**
+     * @Column(type="string")
      * @var null|string
      */
     private $author;
 
     /**
+     * @Column(type="string")
      * @var string
      */
     private $content;
 
     /**
+     * @Column(type="string")
      * @var string
      */
     private $severity;
 
     /**
-     * @var DateTime
+     * @Column(type="datetime")
+     * @var DateTimeImmutable
      */
     private $createdAt;
 
     /**
-     * @var DateTime
+     * @Column(type="datetime")
+     * @var DateTimeImmutable
      */
     private $updateAt;
 
     public function __construct(
-        string $id,
+        string $updateId,
         ?string $author,
         string $content,
         string $severity,
-        DateTime $createdAt,
-        DateTime $updateAt
+        DateTimeImmutable $createdAt,
+        DateTimeImmutable $updateAt
     ) {
-        $this->id = $id;
+        $this->updateId = $updateId;
         $this->author = $author;
         $this->content = $content;
         $this->severity = $severity;

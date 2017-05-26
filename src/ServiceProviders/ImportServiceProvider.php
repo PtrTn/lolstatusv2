@@ -7,6 +7,7 @@ use Import\StatusImportClient;
 use Import\StatusImportService;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
+use Repository\IncidentRepository;
 use Webmozart\Assert\Assert;
 
 class ImportServiceProvider implements ServiceProviderInterface
@@ -31,6 +32,11 @@ class ImportServiceProvider implements ServiceProviderInterface
         $container[StatusImportService::class] = function () use ($container) {
             return new StatusImportService(
                 $container[StatusImportClient::class]
+            );
+        };
+        $container[IncidentRepository::class] = function () use ($container) {
+            return new IncidentRepository(
+                $container['orm.em']
             );
         };
     }

@@ -5,6 +5,7 @@ namespace Command;
 use Import\StatusImportService;
 use Knp\Command\Command;
 use Model\Region;
+use Repository\IncidentRepository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -31,6 +32,10 @@ class ImportCommand extends Command
         $region = Region::latinAmericaNorth();
         $incidents = $service->getIncidentsForRegion($region);
         $output->writeln(sprintf('Found %d incidents', count($incidents)));
+        /** @var IncidentRepository $repository */
+        $repository = $app[IncidentRepository::class];
+        $repository->saveMultiple($incidents);
+        $output->writeln(sprintf('Stored %d incidents', count($incidents)));
         // todo: Diff current status with stored messages
         // todo: Throw event for every new update
         // todo: Register twitter handler on event

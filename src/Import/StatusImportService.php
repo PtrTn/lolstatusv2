@@ -2,10 +2,9 @@
 
 namespace Import;
 
-use DateTime;
+use DateTimeImmutable;
 use Model\Incident;
 use Model\Region;
-use Model\Status;
 use Model\Update;
 
 class StatusImportService
@@ -37,17 +36,17 @@ class StatusImportService
                         $update->author,
                         $update->content,
                         $update->severity,
-                        new DateTime($update->created_at),
-                        new DateTime($update->updated_at)
+                        new DateTimeImmutable($update->created_at),
+                        new DateTimeImmutable($update->updated_at)
                     );
                 }
                 $incidents[] = new Incident(
+                    $incident->id,
                     $status->slug,
                     $service->slug,
                     $service->status,
-                    $incident->id,
                     $incident->active,
-                    new DateTime($incident->created_at),
+                    new DateTimeImmutable($incident->created_at),
                     $updates
                 );
             }

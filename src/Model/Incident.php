@@ -2,116 +2,83 @@
 
 namespace Model;
 
-use DateTime;
+use DateTimeImmutable;
 
+/**
+ * @Entity
+ * @ORM\Entity(repositoryClass="Repository\IncidentRepository")
+ */
 class Incident
 {
     /**
+     * @Id
+     * @GeneratedValue
+     * @Column(type="integer")
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
+    private $incidentId;
+
+    /**
+     * @Column(type="string")
      * @var string
      */
     private $region;
 
     /**
+     * @Column(type="string")
      * @var string
      */
     private $service;
 
     /**
+     * @Column(type="string")
      * @var string
      */
     private $serviceStatus;
 
     /**
-     * @var string
-     */
-    private $id;
-
-    /**
+     * @Column(type="boolean")
      * @var bool
      */
     private $active;
 
     /**
-     * @var DateTime
+     * @Column(type="datetime")
+     * @var DateTimeImmutable
      */
     private $createdAt;
 
     /**
-     * @var array
+     * @ManyToMany(targetEntity="Update", cascade={"persist"})
+     * @JoinTable(name="incident_updates",
+     *      joinColumns={@JoinColumn(name="incident_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="update_id", referencedColumnName="id")}
+     *      )
+     * @var Update[]
      */
     private $updates;
 
     public function __construct(
+        string $id,
         string $region,
         string $service,
         string $serviceStatus,
-        string $id,
         bool $active,
-        DateTime $createdAt,
+        DateTimeImmutable $createdAt,
         array $updates
     ) {
+        $this->incidentId = $id;
         $this->region = $region;
         $this->service = $service;
         $this->serviceStatus = $serviceStatus;
-        $this->id = $id;
         $this->active = $active;
         $this->createdAt = $createdAt;
         $this->updates = $updates;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRegion(): string
-    {
-        return $this->region;
-    }
-
-    /**
-     * @return string
-     */
-    public function getService(): string
-    {
-        return $this->service;
-    }
-
-    /**
-     * @return string
-     */
-    public function getServiceStatus(): string
-    {
-        return $this->serviceStatus;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return array
-     */
-    public function getUpdates(): array
-    {
-        return $this->updates;
     }
 }

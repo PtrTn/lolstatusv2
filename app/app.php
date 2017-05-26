@@ -29,15 +29,14 @@ $app->register(new DoctrineOrmServiceProvider, [
         'mappings' => [
             [
                 'type' => 'annotation',
-                'namespace' => 'Entity',
-                'path' => __DIR__ . '/../src/Entity',
+                'namespace' => 'Model',
+                'path' => __DIR__ . '/../src/Model',
             ]
         ],
     ],
 ]);
 $app->register(new DoctrineMigrationsProvider(), [
-        'migrations.directory' => __DIR__ . '/../app/Migrations',
-        'migrations.namespace' => 'Migrations',
-    ]
-);
+    'migrations.directory' => __DIR__ . '/../app/Migrations',
+    'migrations.namespace' => 'Migrations',
+]);
 $app->register(new ImportServiceProvider());
