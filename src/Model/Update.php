@@ -11,6 +11,7 @@ use DateTimeImmutable;
 class Update
 {
     /**
+     * @Id
      * @GeneratedValue
      * @Column(type="integer")
      * @var int
@@ -18,14 +19,13 @@ class Update
     private $id;
 
     /**
-     * @Id
      * @Column(type="string")
      * @var string
      */
     private $updateId;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      * @var null|string
      */
     private $author;

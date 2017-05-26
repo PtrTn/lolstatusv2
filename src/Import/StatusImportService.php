@@ -71,7 +71,7 @@ class StatusImportService
                 foreach ($incident->updates as $update) {
                     $updates[] = new Update(
                         $update->id,
-                        $update->author,
+                        !empty($update->author) ? $update->author: null,
                         $update->content,
                         $update->severity,
                         new DateTimeImmutable($update->created_at),
