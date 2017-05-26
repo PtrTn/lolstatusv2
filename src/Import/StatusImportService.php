@@ -3,9 +3,14 @@
 namespace Import;
 
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManager;
+use Event\NewIncidentEvent;
+use Event\UpdatedIncidentEvent;
 use Model\Incident;
 use Model\Region;
 use Model\Update;
+use Repository\IncidentRepository;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class StatusImportService
 {
@@ -14,16 +19,49 @@ class StatusImportService
      */
     private $importClient;
 
-    public function __construct(StatusImportClient $importClient)
-    {
+    /**
+     * @var IncidentRepository
+     */
+    private $incidentRepository;
+
+    /**
+     * @var EventDispatcher
+     */
+    private $eventDispatcher;
+
+    public function __construct(
+        StatusImportClient $importClient,
+        EntityManager $entityManager,
+        EventDispatcher $eventDispatcher
+    ) {
         $this->importClient = $importClient;
+        $this->incidentRepository = $entityManager->getRepository(Incident::class);
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function checkForNewOrUpdatedIncidentsInRegion(Region $region) : void
+    {
+        $incidents = $this->getCurrentIncidentsForRegion($region);
+        foreach ($incidents as $incident) {
+            $existingIncident = $this->incidentRepository->findIncident($incident);
+            if (!isset($existingIncident)) {
+                $event = new NewIncidentEvent($incident);
+                $this->eventDispatcher->dispatch('incident.new', $event);
+                continue;
+            }
+            if (!$existingIncident->haveSameUpdates($incident)) {
+                $event = new UpdatedIncidentEvent($existingIncident, $incident);
+                $this->eventDispatcher->dispatch('incident.update', $event);
+            }
+        }
+        return;
     }
 
     /**
      * @param Region $region
      * @return Incident[]
      */
-    public function getIncidentsForRegion(Region $region) : array
+    private function getCurrentIncidentsForRegion(Region $region) : array
     {
         $status = $this->importClient->getStatusForRegion($region);
         $incidents = [];

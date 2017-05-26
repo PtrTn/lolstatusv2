@@ -2,32 +2,43 @@
 
 namespace Repository;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Model\Incident;
-use Webmozart\Assert\Assert;
 
-class IncidentRepository
+class IncidentRepository extends EntityRepository
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    public function __construct(EntityManager $entityManager)
+    public function save(Incident $incident) : void
     {
-        $this->entityManager = $entityManager;
+        $em =  $this->getEntityManager();
+        $em->persist($incident);
+        $em->flush();
+        return;
     }
 
-    /**
-     * @param Incident[] $incidents
-     */
-    public function saveMultiple(array $incidents) : void
+    public function remove(Incident $incident) : void
     {
-        Assert::allIsInstanceOf($incidents, Incident::class);
-        foreach ($incidents as $incident) {
-            $this->entityManager->persist($incident);
-        }
-        $this->entityManager->flush();
+        $em =  $this->getEntityManager();
+        $em->remove($incident);
+        $em->flush();
         return;
+    }
+
+    public function findIncident(Incident $incident) : ?Incident
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('i')
+            ->from(Incident::class, 'i')
+            ->where('i.incidentId = :incidentId')
+            ->andWhere('i.region = :region')
+            ->setMaxResults(1)
+            ->setParameters([
+                'incidentId' => $incident->getIncidentId(),
+                'region' => $incident->getRegion()
+            ]);
+        $result = $qb->getQuery()->getResult();
+        if (count($result) === 1) {
+            return reset($result);
+        }
+        return null;
     }
 }

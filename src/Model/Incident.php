@@ -5,8 +5,7 @@ namespace Model;
 use DateTimeImmutable;
 
 /**
- * @Entity
- * @ORM\Entity(repositoryClass="Repository\IncidentRepository")
+ * @Entity(repositoryClass="Repository\IncidentRepository")
  */
 class Incident
 {
@@ -80,5 +79,74 @@ class Incident
         $this->active = $active;
         $this->createdAt = $createdAt;
         $this->updates = $updates;
+    }
+
+    public function haveSameUpdates(Incident $incident)
+    {
+        return $incident->getUpdates() === $this->updates;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIncidentId(): string
+    {
+        return $this->incidentId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegion(): string
+    {
+        return $this->region;
+    }
+
+    /**
+     * @return string
+     */
+    public function getService(): string
+    {
+        return $this->service;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceStatus(): string
+    {
+        return $this->serviceStatus;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return Update[]
+     */
+    public function getUpdates(): array
+    {
+        return $this->updates;
     }
 }

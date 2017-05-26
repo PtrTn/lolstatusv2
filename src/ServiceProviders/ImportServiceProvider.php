@@ -2,12 +2,13 @@
 
 namespace ServiceProviders;
 
+use EventSubscriber\IncidentEventSubscriber;
 use GuzzleHttp\Client as HttpClient;
 use Import\StatusImportClient;
 use Import\StatusImportService;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
-use Repository\IncidentRepository;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Webmozart\Assert\Assert;
 
 class ImportServiceProvider implements ServiceProviderInterface
@@ -31,13 +32,16 @@ class ImportServiceProvider implements ServiceProviderInterface
         };
         $container[StatusImportService::class] = function () use ($container) {
             return new StatusImportService(
-                $container[StatusImportClient::class]
+                $container[StatusImportClient::class],
+                $container['orm.em'],
+                $container['dispatcher']
             );
         };
-        $container[IncidentRepository::class] = function () use ($container) {
-            return new IncidentRepository(
-                $container['orm.em']
-            );
-        };
+
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = $container['dispatcher'];
+        $eventDispatcher->addSubscriber(
+            new IncidentEventSubscriber($container['orm.em'])
+        );
     }
 }

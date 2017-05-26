@@ -4,8 +4,8 @@ namespace Command;
 
 use Import\StatusImportService;
 use Knp\Command\Command;
+use EventSubscriber\NewIncidentEventSubscriber;
 use Model\Region;
-use Repository\IncidentRepository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -26,18 +26,15 @@ class ImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
-        $output->writeln('Loading service data');
+
         /** @var StatusImportService $service */
         $service = $app[StatusImportService::class];
         $region = Region::latinAmericaNorth();
-        $incidents = $service->getIncidentsForRegion($region);
-        $output->writeln(sprintf('Found %d incidents', count($incidents)));
-        /** @var IncidentRepository $repository */
-        $repository = $app[IncidentRepository::class];
-        $repository->saveMultiple($incidents);
-        $output->writeln(sprintf('Stored %d incidents', count($incidents)));
-        // todo: Diff current status with stored messages
-        // todo: Throw event for every new update
+
+        $output->writeln('Checking for new or updated incidents');
+        $service->checkForNewOrUpdatedIncidentsInRegion($region);
+        $output->writeln('Done checking for incidents');
+
         // todo: Register twitter handler on event
         // todo: Register facebook handler on event
         return;
