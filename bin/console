@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-use Command\HelloWorldCommand;
+use Command\ImportCommand;
 use Knp\Provider\ConsoleServiceProvider;
 
 require(__DIR__ . '/../app/app.php');
@@ -16,5 +16,5 @@ $app->register(
 $console = $app['console'];
 $console->setHelperSet($app['migrations.em_helper_set']);
 $console->addCommands($app['migrations.commands']);
-$console->add(new HelloWorldCommand());
+$console->add(new ImportCommand());
 $console->run();
