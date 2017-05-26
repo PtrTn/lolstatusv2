@@ -11,7 +11,6 @@ use DateTimeImmutable;
 class Update
 {
     /**
-     * @Id
      * @GeneratedValue
      * @Column(type="integer")
      * @var int
@@ -19,6 +18,7 @@ class Update
     private $id;
 
     /**
+     * @Id
      * @Column(type="string")
      * @var string
      */
@@ -68,5 +68,61 @@ class Update
         $this->severity = $severity;
         $this->createdAt = $createdAt;
         $this->updateAt = $updateAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId() : int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdateId()
+    {
+        return $this->updateId;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeverity(): string
+    {
+        return $this->severity;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getUpdateAt(): DateTimeImmutable
+    {
+        return $this->updateAt;
     }
 }
