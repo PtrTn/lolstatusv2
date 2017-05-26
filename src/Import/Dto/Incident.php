@@ -5,6 +5,9 @@ namespace Import\Dto;
 use stdClass;
 use Webmozart\Assert\Assert;
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ */
 class Incident
 {
     /**

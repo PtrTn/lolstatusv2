@@ -6,10 +6,10 @@ use Webmozart\Assert\Assert;
 
 class Region
 {
-    private const EUW = 'euw';
-    private const NA = 'na';
-    private const OCE = 'oce';
-    private const LAN = 'lan';
+    const EUW = 'euw';
+    const NA = 'na';
+    const OCE = 'oce';
+    const LAN = 'lan';
 
     /**
      * @var string
