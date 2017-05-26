@@ -6,6 +6,7 @@ use EventSubscriber\IncidentEventSubscriber;
 use GuzzleHttp\Client as HttpClient;
 use Import\StatusImportClient;
 use Import\StatusImportService;
+use Messenger\FacebookMessengerService;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -24,9 +25,9 @@ class ImportServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container[StatusImportClient::class] = function () use ($container) {
-            Assert::stringNotEmpty($container['config']['api-url']);
+            Assert::stringNotEmpty($container['config']['api_url']);
             $httpClient = new HttpClient([
-                'base_uri' => $container['config']['api-url']
+                'base_uri' => $container['config']['api_url']
             ]);
             return new StatusImportClient($httpClient);
         };
@@ -41,7 +42,10 @@ class ImportServiceProvider implements ServiceProviderInterface
         /** @var EventDispatcher $eventDispatcher */
         $eventDispatcher = $container['dispatcher'];
         $eventDispatcher->addSubscriber(
-            new IncidentEventSubscriber($container['orm.em'])
+            new IncidentEventSubscriber(
+                $container['orm.em'],
+                $container[FacebookMessengerService::class]
+            )
         );
     }
 }

@@ -1,2 +1,6 @@
-api-url:
-  euw: ""
+status_page_url: ''
+api_url: ''
+facebook:
+  app_id: ''
+  app_secret: ''
+  access_token: ''

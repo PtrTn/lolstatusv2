@@ -4,18 +4,17 @@ namespace Command;
 
 use Import\StatusImportService;
 use Knp\Command\Command;
-use EventSubscriber\NewIncidentEventSubscriber;
 use Model\Region;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ImportCommand extends Command
+class ImportIncidentsCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("import")
-            ->setDescription("Load service status data from API");
+            ->setName("import:incidents")
+            ->setDescription("Load service incidents from League of Legends status page API");
     }
 
     /**
@@ -29,14 +28,13 @@ class ImportCommand extends Command
 
         /** @var StatusImportService $service */
         $service = $app[StatusImportService::class];
-        $region = Region::latinAmericaNorth();
+        $region = Region::euWest();
 
         $output->writeln('Checking for new or updated incidents');
         $service->checkForNewOrUpdatedIncidentsInRegion($region);
         $output->writeln('Done checking for incidents');
 
         // todo: Register twitter handler on event
-        // todo: Register facebook handler on event
         return;
     }
 }

@@ -6,6 +6,7 @@ use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Kurl\Silex\Provider\DoctrineMigrationsProvider;
 use Rpodwika\Silex\YamlConfigServiceProvider;
 use ServiceProviders\ImportServiceProvider;
+use ServiceProviders\MessengerServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
 
 $app = new Silex\Application();
@@ -39,4 +40,5 @@ $app->register(new DoctrineMigrationsProvider(), [
     'migrations.directory' => __DIR__ . '/../app/Migrations',
     'migrations.namespace' => 'Migrations',
 ]);
+$app->register(new MessengerServiceProvider());
 $app->register(new ImportServiceProvider());
