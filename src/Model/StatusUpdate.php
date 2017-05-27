@@ -6,7 +6,6 @@ use DateTimeImmutable;
 
 /**
  * @Entity(repositoryClass="Repository\StatusUpdateRepository")
- * @Table(name="`Update`")
  */
 class StatusUpdate
 {
