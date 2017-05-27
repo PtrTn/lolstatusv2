@@ -5,7 +5,7 @@ namespace Import\Dto;
 use stdClass;
 use Webmozart\Assert\Assert;
 
-class Service
+class ServiceDto
 {
     /**
      * @var string
@@ -23,7 +23,7 @@ class Service
     public $status;
 
     /**
-     * @var Incident[]
+     * @var IncidentDto[]
      */
     public $incidents;
 
@@ -38,7 +38,7 @@ class Service
         $serviceDto->status = $service->status;
         $incidentDtos = [];
         foreach ($service->incidents as $incident) {
-            $incidentDtos[] = Incident::fromStdClass($incident);
+            $incidentDtos[] = IncidentDto::fromStdClass($incident);
         }
         $serviceDto->incidents = $incidentDtos;
         return $serviceDto;

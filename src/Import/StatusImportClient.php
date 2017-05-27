@@ -3,7 +3,7 @@
 namespace Import;
 
 use GuzzleHttp\Client;
-use Import\Dto\Status;
+use Import\Dto\StatusDto;
 use Import\Exception\ImportFailedException;
 use Model\Region;
 use Psr\Http\Message\ResponseInterface;
@@ -20,7 +20,7 @@ class StatusImportClient
         $this->httpClient = $httpClient;
     }
 
-    public function getStatusForRegion(Region $region) : Status
+    public function getStatusForRegion(Region $region) : StatusDto
     {
         try {
             $response = $this->httpClient->get($region->toString());
@@ -30,13 +30,13 @@ class StatusImportClient
         return $this->createStatusFromResponse($response);
     }
 
-    public function createStatusFromResponse(ResponseInterface $response) : Status
+    public function createStatusFromResponse(ResponseInterface $response) : StatusDto
     {
         $contents = $response->getBody()->getContents();
         if (empty($contents)) {
             throw new ImportFailedException();
         }
         $decoded = \GuzzleHttp\json_decode($contents, false);
-        return Status::fromStdClass($decoded);
+        return StatusDto::fromStdClass($decoded);
     }
 }

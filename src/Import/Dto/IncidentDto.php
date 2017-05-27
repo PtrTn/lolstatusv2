@@ -8,7 +8,7 @@ use Webmozart\Assert\Assert;
 /**
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Incident
+class IncidentDto
 {
     /**
      * @var int
@@ -26,7 +26,7 @@ class Incident
     public $created_at;
 
     /**
-     * @var Update[]
+     * @var UpdateDto[]
      */
     public $updates;
 
@@ -43,7 +43,7 @@ class Incident
 
         $updateDtos = [];
         foreach ($incident->updates as $update) {
-            $updateDtos[] = Update::fromStdClass($update);
+            $updateDtos[] = UpdateDto::fromStdClass($update);
         }
         $incidentDto->updates = $updateDtos;
         return $incidentDto;

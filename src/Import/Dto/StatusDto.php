@@ -8,7 +8,7 @@ use Webmozart\Assert\Assert;
 /**
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class Status
+class StatusDto
 {
     /**
      * @var string
@@ -36,7 +36,7 @@ class Status
     public $region_tag;
 
     /**
-     * @var Service[]
+     * @var ServiceDto[]
      */
     public $services;
 
@@ -55,7 +55,7 @@ class Status
         $statusDto->region_tag = $status->region_tag;
         $statusDto->services = [];
         foreach ($status->services as $service) {
-            $statusDto->services[] = Service::fromStdClass($service);
+            $statusDto->services[] = ServiceDto::fromStdClass($service);
         }
         return $statusDto;
     }

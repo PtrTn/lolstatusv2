@@ -3,25 +3,25 @@
 namespace Import;
 
 use DateTimeImmutable;
-use Import\Dto\Service;
-use Import\Dto\Status;
+use Import\Dto\ServiceDto;
+use Import\Dto\StatusDto;
 use Model\Incident;
 use Model\Update;
-use Import\Dto\Incident as IncidentDto;
-use Import\Dto\Update as UpdateDto;
+use Import\Dto\IncidentDto as IncidentDto;
+use Import\Dto\UpdateDto as UpdateDto;
 
 class IncidentFactory
 {
-    public function createIncidentFromDto(IncidentDto $dto, Status $status, Service $service) : Incident
+    public function createIncidentFromDto(IncidentDto $incident, StatusDto $status, ServiceDto $service) : Incident
     {
         return new Incident(
-            $dto->id,
+            $incident->id,
             $status->slug,
             $service->slug,
             $service->status,
-            $dto->active,
-            new DateTimeImmutable($dto->created_at),
-            $this->createUpdatesFromDto($dto->updates)
+            $incident->active,
+            new DateTimeImmutable($incident->created_at),
+            $this->createUpdatesFromDto($incident->updates)
         );
     }
 
@@ -33,15 +33,20 @@ class IncidentFactory
     {
         $updates = [];
         foreach ($updateDtos as $dto) {
-            $updates[] = new Update(
-                $dto->id,
-                !empty($dto->author) ? $dto->author: null,
-                $dto->content,
-                $dto->severity,
-                new DateTimeImmutable($dto->created_at),
-                new DateTimeImmutable($dto->updated_at)
-            );
+            $updates[] = $this->createUpdateFromDto($dto);
         }
         return $updates;
+    }
+
+    private function createUpdateFromDto(UpdateDto $dto) : Update
+    {
+        return new Update(
+            $dto->id,
+            !empty($dto->author) ? $dto->author: null,
+            $dto->content,
+            $dto->severity,
+            new DateTimeImmutable($dto->created_at),
+            new DateTimeImmutable($dto->updated_at)
+        );
     }
 }
