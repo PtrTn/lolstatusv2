@@ -109,4 +109,100 @@ class StatusUpdate
         $this->createdAt = $createdAt;
         $this->updateAt = $updateAt;
     }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIncidentId(): string
+    {
+        return $this->incidentId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdateId(): string
+    {
+        return $this->updateId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegionSlug(): string
+    {
+        return $this->regionSlug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegionName(): string
+    {
+        return $this->regionName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceName(): string
+    {
+        return $this->serviceName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceStatus(): string
+    {
+        return $this->serviceStatus;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeverity(): string
+    {
+        return $this->severity;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getUpdateAt(): DateTimeImmutable
+    {
+        return $this->updateAt;
+    }
 }
