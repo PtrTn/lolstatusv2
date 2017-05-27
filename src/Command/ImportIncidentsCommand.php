@@ -30,11 +30,12 @@ class ImportIncidentsCommand extends Command
         $service = $app[StatusImportService::class];
         $region = Region::euWest();
 
-        $output->writeln('Checking for new or updated incidents');
-        $service->checkForNewOrUpdatedIncidentsInRegion($region);
-        $output->writeln('Done checking for incidents');
+        $output->writeln('Checking for new status updates');
+        $count = $service->checkForNewStatusUpdates($region);
+        $output->writeln(sprintf('Found %d status updates', $count));
 
         // todo: Register twitter handler on event
+        // todo: Notify admin on any exceptions
         return;
     }
 }

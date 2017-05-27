@@ -63,6 +63,8 @@ class FacebookMessengerService
 
     private function postMessage(FacebookMessage $message) : void
     {
+        var_dump('Not sending message', $message);
+        return;
         $response = $this->facebook->post(
             '/813062038724116/feed',
             [

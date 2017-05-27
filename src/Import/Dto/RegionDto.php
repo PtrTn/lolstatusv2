@@ -8,7 +8,7 @@ use Webmozart\Assert\Assert;
 /**
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
-class StatusDto
+class RegionDto
 {
     /**
      * @var string

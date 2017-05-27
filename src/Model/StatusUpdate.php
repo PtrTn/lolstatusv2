@@ -5,10 +5,10 @@ namespace Model;
 use DateTimeImmutable;
 
 /**
- * @Entity
+ * @Entity(repositoryClass="Repository\StatusUpdateRepository")
  * @Table(name="`Update`")
  */
-class Update
+class StatusUpdate
 {
     /**
      * @Id
@@ -22,7 +22,38 @@ class Update
      * @Column(type="string")
      * @var string
      */
+    private $incidentId;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
     private $updateId;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
+    private $regionSlug;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
+    private $regionName;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
+    private $serviceName;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
+    private $serviceStatus;
+
 
     /**
      * @Column(type="string", nullable=true)
@@ -55,74 +86,28 @@ class Update
     private $updateAt;
 
     public function __construct(
+        string $incidentId,
         string $updateId,
+        string $regionSlug,
+        string $regionName,
+        string $serviceName,
+        string $serviceStatus,
         ?string $author,
         string $content,
         string $severity,
         DateTimeImmutable $createdAt,
         DateTimeImmutable $updateAt
     ) {
+        $this->incidentId = $incidentId;
         $this->updateId = $updateId;
+        $this->regionSlug = $regionSlug;
+        $this->regionName = $regionName;
+        $this->serviceName = $serviceName;
+        $this->serviceStatus = $serviceStatus;
         $this->author = $author;
         $this->content = $content;
         $this->severity = $severity;
         $this->createdAt = $createdAt;
         $this->updateAt = $updateAt;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId() : int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUpdateId()
-    {
-        return $this->updateId;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSeverity(): string
-    {
-        return $this->severity;
-    }
-
-    /**
-     * @return DateTimeImmutable
-     */
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return DateTimeImmutable
-     */
-    public function getUpdateAt(): DateTimeImmutable
-    {
-        return $this->updateAt;
     }
 }

@@ -2,14 +2,14 @@
 
 namespace Import;
 
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
-use Event\NewIncidentEvent;
-use Event\UpdatedIncidentEvent;
-use Model\Incident;
+use Event\NewStatusUpdateEvent;
+use Import\Dto\IncidentDto;
+use Import\Dto\RegionDto;
+use Import\Dto\UpdateDto;
 use Model\Region;
-use Model\Update;
-use Repository\IncidentRepository;
+use Model\StatusUpdate;
+use Repository\StatusUpdateRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class StatusImportService
@@ -20,9 +20,9 @@ class StatusImportService
     private $importClient;
 
     /**
-     * @var IncidentRepository
+     * @var StatusUpdateRepository
      */
-    private $incidentRepository;
+    private $statusUpdateRepository;
 
     /**
      * @var EventDispatcher
@@ -35,60 +35,31 @@ class StatusImportService
         EventDispatcher $eventDispatcher
     ) {
         $this->importClient = $importClient;
-        $this->incidentRepository = $entityManager->getRepository(Incident::class);
+        $this->statusUpdateRepository = $entityManager->getRepository(StatusUpdate::class);
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function checkForNewOrUpdatedIncidentsInRegion(Region $region) : void
+    public function checkForNewStatusUpdates(Region $region) : int
     {
-        $incidents = $this->getCurrentIncidentsForRegion($region);
-        foreach ($incidents as $incident) {
-            $existingIncident = $this->incidentRepository->findIncident($incident);
-            if (!isset($existingIncident)) {
-                $event = new NewIncidentEvent($incident);
-                $this->eventDispatcher->dispatch('incident.new', $event);
-                continue;
-            }
-            if (!$existingIncident->haveSameUpdates($incident)) {
-                $event = new UpdatedIncidentEvent($existingIncident, $incident);
-                $this->eventDispatcher->dispatch('incident.update', $event);
+        $updateCount = 0;
+        $regionDto = $this->importClient->getStatusForRegion($region);
+        foreach ($regionDto->services as $serviceDto) {
+            foreach ($serviceDto->incidents as $incidentDto) {
+                foreach ($incidentDto->updates as $updateDto) {
+                    if (!$this->updateExists($updateDto, $incidentDto, $regionDto)) {
+                        $event = new NewStatusUpdateEvent($updateDto, $incidentDto, $serviceDto, $regionDto);
+                        $this->eventDispatcher->dispatch('status_update.new', $event);
+                        $updateCount++;
+                    }
+                }
             }
         }
-        return;
+        return $updateCount;
     }
 
-    /**
-     * @param Region $region
-     * @return Incident[]
-     */
-    private function getCurrentIncidentsForRegion(Region $region) : array
+    private function updateExists(UpdateDto $updateDto, IncidentDto $incidentDto, RegionDto $regionDto) : bool
     {
-        $status = $this->importClient->getStatusForRegion($region);
-        $incidents = [];
-        foreach ($status->services as $service) {
-            foreach ($service->incidents as $incident) {
-                $updates = [];
-                foreach ($incident->updates as $update) {
-                    $updates[] = new Update(
-                        $update->id,
-                        !empty($update->author) ? $update->author: null,
-                        $update->content,
-                        $update->severity,
-                        new DateTimeImmutable($update->created_at),
-                        new DateTimeImmutable($update->updated_at)
-                    );
-                }
-                $incidents[] = new Incident(
-                    $incident->id,
-                    $status->slug,
-                    $service->slug,
-                    $service->status,
-                    $incident->active,
-                    new DateTimeImmutable($incident->created_at),
-                    $updates
-                );
-            }
-        }
-        return $incidents;
+        $statusUpdate = $this->statusUpdateRepository->findUpdate($updateDto->id, $incidentDto->id, $regionDto->slug);
+        return isset($statusUpdate);
     }
 }

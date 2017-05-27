@@ -4,7 +4,7 @@ namespace Messenger;
 
 use Messenger\Dto\FacebookMessage;
 use Model\Incident;
-use Model\Update;
+use Model\StatusUpdate;
 
 class FacebookMessageFactory
 {
@@ -42,7 +42,7 @@ class FacebookMessageFactory
         return $messages;
     }
 
-    private function createMessageFromUpdate(Incident $incident, Update $update) : FacebookMessage
+    private function createMessageFromUpdate(Incident $incident, StatusUpdate $update) : FacebookMessage
     {
         $dto = new FacebookMessage();
         $dto->author = $update->getAuthor();
@@ -64,7 +64,7 @@ class FacebookMessageFactory
         return $newUpdates;
     }
 
-    private function incidentHasUpdate(Incident $incident, Update $update) : bool
+    private function incidentHasUpdate(Incident $incident, StatusUpdate $update) : bool
     {
         $oldUpdates = $incident->getUpdates();
         foreach ($oldUpdates as $oldUpdate) {

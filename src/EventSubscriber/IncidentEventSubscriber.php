@@ -3,30 +3,36 @@
 namespace EventSubscriber;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Event\NewIncidentEvent;
-use Event\UpdatedIncidentEvent;
+use Event\NewStatusUpdateEvent;
+use Import\StatusUpdateFactory;
 use Messenger\FacebookMessengerService;
-use Model\Incident;
-use Repository\IncidentRepository;
+use Model\StatusUpdate;
+use Repository\StatusUpdateRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class IncidentEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var IncidentRepository
+     * @var StatusUpdateRepository
      */
     private $incidentRepository;
     /**
      * @var FacebookMessengerService
      */
     private $facebookMessengerService;
+    /**
+     * @var StatusUpdateFactory
+     */
+    private $statusUpdateFactory;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        FacebookMessengerService $facebookMessengerService
+        FacebookMessengerService $facebookMessengerService,
+        StatusUpdateFactory $statusUpdateFactory
     ) {
-        $this->incidentRepository = $entityManager->getRepository(Incident::class);
+        $this->incidentRepository = $entityManager->getRepository(StatusUpdate::class);
         $this->facebookMessengerService = $facebookMessengerService;
+        $this->statusUpdateFactory = $statusUpdateFactory;
     }
 
     /**
@@ -50,24 +56,19 @@ class IncidentEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'incident.new' => 'handleNewIncidentEvent',
-            'incident.updated' => 'handleUpdatedIncidentEvent'
+            'status_update.new' => 'handleNewIncidentEvent',
         ];
     }
 
-    public function handleNewIncidentEvent(NewIncidentEvent $event)
+    public function handleNewIncidentEvent(NewStatusUpdateEvent $event)
     {
-        $this->incidentRepository->save($event->getIncident());
-        $this->facebookMessengerService->postIncident($event->getIncident());
-    }
-
-    public function handleUpdatedIncidentEvent(UpdatedIncidentEvent $event)
-    {
-        $this->incidentRepository->remove($event->getOldIncident());
-        $this->incidentRepository->remove($event->getUpdatedIncident());
-        $this->facebookMessengerService->postIncidentUpdate(
-            $event->getOldIncident(),
-            $event->getUpdatedIncident()
+        $statusUpdate = $this->statusUpdateFactory->createFromDtos(
+            $event->getUpdateDto(),
+            $event->getIncidentDto(),
+            $event->getServiceDto(),
+            $event->getRegionDto()
         );
+        $this->incidentRepository->save($statusUpdate);
+//        $this->facebookMessengerService->postIncident($statusUpdate); // Todo
     }
 }
