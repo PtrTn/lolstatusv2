@@ -6,6 +6,7 @@ use EventSubscriber\IncidentEventSubscriber;
 use GuzzleHttp\Client as HttpClient;
 use Import\StatusImportClient;
 use Import\StatusImportService;
+use Import\StatusUpdateFactory;
 use Messenger\FacebookMessengerService;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
@@ -39,12 +40,17 @@ class ImportServiceProvider implements ServiceProviderInterface
             );
         };
 
+        $container[StatusUpdateFactory::class] = function () {
+            return new StatusUpdateFactory();
+        };
+
         /** @var EventDispatcher $eventDispatcher */
         $eventDispatcher = $container['dispatcher'];
         $eventDispatcher->addSubscriber(
             new IncidentEventSubscriber(
                 $container['orm.em'],
-                $container[FacebookMessengerService::class]
+                $container[FacebookMessengerService::class],
+                $container[StatusUpdateFactory::class]
             )
         );
     }
