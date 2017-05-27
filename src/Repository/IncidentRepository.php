@@ -23,7 +23,7 @@ class IncidentRepository extends EntityRepository
         return;
     }
 
-    public function findIncident(Incident $incident) : ?Incident
+    public function findIncidentByIdAndRegion(string $id, string $region) : ?Incident
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('i')
@@ -32,8 +32,8 @@ class IncidentRepository extends EntityRepository
             ->andWhere('i.region = :region')
             ->setMaxResults(1)
             ->setParameters([
-                'incidentId' => $incident->getIncidentId(),
-                'region' => $incident->getRegion()
+                'incidentId' => $id,
+                'region' => $region
             ]);
         $result = $qb->getQuery()->getResult();
         if (count($result) === 1) {
