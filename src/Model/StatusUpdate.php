@@ -84,6 +84,9 @@ class StatusUpdate
      */
     private $updateAt;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         string $incidentId,
         string $updateId,
