@@ -1,6 +1,8 @@
 <?php
 
-namespace Messenger\Dto;
+namespace Messenger\Facebook\Dto;
+
+use Model\StatusUpdate;
 
 class FacebookMessage
 {

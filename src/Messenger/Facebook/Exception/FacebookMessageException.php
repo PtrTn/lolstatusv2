@@ -1,6 +1,6 @@
 <?php
 
-namespace Messenger\Exception;
+namespace Messenger\Facebook\Exception;
 
 use Exception;
 

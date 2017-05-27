@@ -2,12 +2,12 @@
 
 namespace ServiceProviders;
 
-use EventSubscriber\IncidentEventSubscriber;
+use EventSubscriber\StatusUpdateEventSubscriber;
 use GuzzleHttp\Client as HttpClient;
 use Import\StatusImportClient;
 use Import\StatusImportService;
 use Import\StatusUpdateFactory;
-use Messenger\FacebookMessengerService;
+use Messenger\Facebook\FacebookMessengerService;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -47,10 +47,10 @@ class ImportServiceProvider implements ServiceProviderInterface
         /** @var EventDispatcher $eventDispatcher */
         $eventDispatcher = $container['dispatcher'];
         $eventDispatcher->addSubscriber(
-            new IncidentEventSubscriber(
+            new StatusUpdateEventSubscriber(
                 $container['orm.em'],
-                $container[FacebookMessengerService::class],
-                $container[StatusUpdateFactory::class]
+                $container[StatusUpdateFactory::class],
+                $container[FacebookMessengerService::class]
             )
         );
     }

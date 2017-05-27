@@ -2,8 +2,8 @@
 
 namespace ServiceProviders;
 
-use Messenger\FacebookMessageFactory;
-use Messenger\FacebookMessengerService;
+use Messenger\Facebook\FacebookMessageFactory;
+use Messenger\Facebook\FacebookMessengerService;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
 use Webmozart\Assert\Assert;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Messenger;
+namespace Messenger\Facebook;
 
 use Facebook\Facebook;
-use Messenger\Dto\FacebookMessage;
-use Messenger\Exception\FacebookMessageException;
-use Model\Incident;
+use Messenger\Facebook\Exception\FacebookMessageException;
+use Messenger\MessengerInterface;
+use Model\StatusUpdate;
 
-class FacebookMessengerService
+class FacebookMessengerService implements MessengerInterface
 {
     /**
      * @var FacebookMessageFactory
@@ -41,29 +41,10 @@ class FacebookMessengerService
         $this->messageFactory = $messageFactory;
     }
 
-    public function postIncident(Incident $incident) : void
+    public function sendMessage(StatusUpdate $statusUpdate) : void
     {
-        // Todo: this needs some good testing!
-        $messages = $this->messageFactory->createMessagesFromIncident($incident);
-        foreach ($messages as $message) {
-            $this->postMessage($message);
-        }
-        return;
-    }
-
-    public function postIncidentUpdate(Incident $oldIncident, Incident $updatedIncident) : void
-    {
-        // Todo: this needs some good testing!
-        $messages = $this->messageFactory->createMessageFromIncidentUpdate($oldIncident, $updatedIncident);
-        foreach ($messages as $message) {
-            $this->postMessage($message);
-        }
-        return;
-    }
-
-    private function postMessage(FacebookMessage $message) : void
-    {
-        var_dump('Not sending message', $message);
+        $message = $this->messageFactory->createMessageFromStatusUpdate($statusUpdate);
+        var_dump('Not sending message', $message->toString());
         return;
         $response = $this->facebook->post(
             '/813062038724116/feed',

@@ -5,12 +5,12 @@ namespace EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Event\NewStatusUpdateEvent;
 use Import\StatusUpdateFactory;
-use Messenger\FacebookMessengerService;
+use Messenger\Facebook\FacebookMessengerService;
 use Model\StatusUpdate;
 use Repository\StatusUpdateRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class IncidentEventSubscriber implements EventSubscriberInterface
+class StatusUpdateEventSubscriber implements EventSubscriberInterface
 {
     /**
      * @var StatusUpdateRepository
@@ -27,12 +27,12 @@ class IncidentEventSubscriber implements EventSubscriberInterface
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        FacebookMessengerService $facebookMessengerService,
-        StatusUpdateFactory $statusUpdateFactory
+        StatusUpdateFactory $statusUpdateFactory,
+        FacebookMessengerService $facebookMessengerService
     ) {
         $this->incidentRepository = $entityManager->getRepository(StatusUpdate::class);
-        $this->facebookMessengerService = $facebookMessengerService;
         $this->statusUpdateFactory = $statusUpdateFactory;
+        $this->facebookMessengerService = $facebookMessengerService;
     }
 
     /**
@@ -69,6 +69,6 @@ class IncidentEventSubscriber implements EventSubscriberInterface
             $event->getRegionDto()
         );
         $this->incidentRepository->save($statusUpdate);
-//        $this->facebookMessengerService->postIncident($statusUpdate); // Todo
+        $this->facebookMessengerService->sendMessage($statusUpdate);
     }
 }
