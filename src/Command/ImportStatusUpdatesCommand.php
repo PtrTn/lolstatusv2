@@ -8,12 +8,12 @@ use Model\Region;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ImportIncidentsCommand extends Command
+class ImportStatusUpdatesCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName("import:incidents")
+            ->setName("import:statusupdate")
             ->setDescription("Load service incidents from League of Legends status page API");
     }
 
