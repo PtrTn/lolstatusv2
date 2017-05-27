@@ -21,12 +21,12 @@ class StatusUpdateRepository extends EntityRepository
         $qb->select('su')
             ->from(StatusUpdate::class, 'su')
             ->where('su.incidentId = :incidentId')
-            ->where('su.updateId = :updateId')
-            ->andWhere('su.region = :region')
+            ->andWhere('su.updateId = :updateId')
+            ->andWhere('su.regionSlug = :region')
             ->setMaxResults(1)
             ->setParameters([
                 'incidentId' => $incidentId,
-                'udpateId' => $updateId,
+                'updateId' => $updateId,
                 'region' => $region
             ]);
         $result = $qb->getQuery()->getResult();
